@@ -1,23 +1,21 @@
-name: CI-CD Pipeline
+name: Python application
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
 
-  # ------------------------
-  # CI JOB: TESTING
-  # ------------------------
+  # CI job: testing
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
+            
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -31,19 +29,18 @@ jobs:
         run: |
           pytest -v
 
-  # ------------------------
-  # CD JOB: DEPLOYMENT
-  # ------------------------
+
+  # CD job: deployment
   deploy:
     needs: test
     runs-on: ubuntu-latest
-
+    
     permissions:
       pages: write
       id-token: write
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Create Deployment Folder
@@ -54,9 +51,9 @@ jobs:
           echo "<p>All tests passed!</p>" >> public/index.html
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v1
         with:
           path: public
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to Github Pages
         uses: actions/deploy-pages@v4
