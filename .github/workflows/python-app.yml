@@ -39,6 +39,10 @@ jobs:
       pages: write
       id-token: write
 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -56,4 +60,5 @@ jobs:
           path: public
 
       - name: Deploy to Github Pages
+        id: deployment
         uses: actions/deploy-pages@v4
